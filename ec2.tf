@@ -45,7 +45,7 @@ resource "aws_route" "internet_gateway_route" {
 
 resource "aws_instance" "web_ec2_instance" {
   ami                    = "ami-007020fd9c84e18c7"  # Replace with your desired AMI ID for web tier
-  key_name               = "Project"
+  key_name               = "cicd"
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.subnet_a.id
   associate_public_ip_address = true  # Assign a public IP to the web server
