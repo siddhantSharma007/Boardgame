@@ -48,7 +48,6 @@ resource "aws_instance" "web_ec2_instance" {
   key_name               = "cicd"
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.subnet_a.id
-  associate_public_ip_address = true  # Assign a public IP to the web server
   
   tags = {
     Name = "WebEC2Instance"
