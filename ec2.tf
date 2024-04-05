@@ -84,12 +84,20 @@ resource "aws_instance" "web_ec2_instance" {
   }
 
   provisioner "local-exec" {
-    command = "until nc -z -w 2 ${self.public_ip} 22; do echo 'Waiting for SSH to be available'; sleep 5; done"
+    # Wait until the instance is in the "running" state
+    # This command uses the AWS CLI to check the instance state
+    command = <<-EOT
+      until [ "$(aws ec2 describe-instances --instance-ids ${self.id} --query 'Reservations[].Instances[].State[].Name' --output text)" = "running" ]; do
+        echo "Waiting for the EC2 instance to be in the running state..."
+        sleep 5
+      done
+    EOT
   }
 }
 
 output "public_ip" {
   value = aws_instance.web_ec2_instance.public_ip
 }
+
 
 
