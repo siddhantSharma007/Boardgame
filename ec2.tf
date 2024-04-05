@@ -83,3 +83,8 @@ resource "aws_instance" "web_ec2_instance" {
     Name = "WebEC2Instance"
   }
 }
+
+output "public_ip" {
+  value = aws_instance.web_ec2_instance.public_ip
+}
+
