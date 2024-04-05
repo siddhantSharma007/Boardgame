@@ -1,4 +1,4 @@
-# Create a VPC
+ # Create a VPC
 resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"
   
@@ -71,33 +71,15 @@ resource "aws_security_group" "my_sg" {
   }
 }
 
-# Generate SSH key pair
-resource "tls_private_key" "my_ssh_key" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-# Output public IP address of the instance
-output "instance_public_ip" {
-  value = aws_instance.web_ec2_instance.public_ip
-}
-
-# Output private key path
-output "private_key_path" {
-  value = tls_private_key.my_ssh_key.private_key_pem
-}
-
 # Create EC2 instance
-
 resource "aws_instance" "web_ec2_instance" {
   ami                    = "ami-0395649fbe870727e"  # Replace with your desired AMI ID for web tier
+  key_name               = "cicd"
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.subnet_a.id
-  key_name               = tls_private_key.my_ssh_key.key_name
   vpc_security_group_ids = [aws_security_group.my_sg.id]
   
   tags = {
     Name = "WebEC2Instance"
   }
 }
-
