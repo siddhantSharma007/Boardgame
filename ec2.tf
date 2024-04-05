@@ -88,6 +88,7 @@ output "private_key_path" {
 }
 
 # Create EC2 instance
+
 resource "aws_instance" "web_ec2_instance" {
   ami                    = "ami-0395649fbe870727e"  # Replace with your desired AMI ID for web tier
   instance_type          = "t2.micro"
@@ -99,3 +100,4 @@ resource "aws_instance" "web_ec2_instance" {
     Name = "WebEC2Instance"
   }
 }
+
