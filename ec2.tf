@@ -82,9 +82,14 @@ resource "aws_instance" "web_ec2_instance" {
   tags = {
     Name = "WebEC2Instance"
   }
+
+  provisioner "local-exec" {
+    command = "until nc -z -w 2 ${self.public_ip} 22; do echo 'Waiting for SSH to be available'; sleep 5; done"
+  }
 }
 
 output "public_ip" {
   value = aws_instance.web_ec2_instance.public_ip
 }
+
 
