@@ -22,6 +22,7 @@ resource "aws_subnet" "subnet_a" {
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-west-2a"
   map_public_ip_on_launch = true  # Enable public IP assignment for instances in this subnet
+  route_table_id    = aws_route_table.my_route_table.id  # Associate subnet with custom route table
 
   tags = {
     Name = "SubnetA"
