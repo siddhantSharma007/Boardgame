@@ -48,37 +48,24 @@ resource "aws_route" "internet_gateway_route" {
 # Create Security Group
 resource "aws_security_group" "my_sg" {
   name        = "MySecurityGroup"
-  description = "Allow inbound traffic on port 80 and 22"
+  description = "Allow all traffic"
   vpc_id      = aws_vpc.my_vpc.id
   
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
- ingress {
-    from_port   = 8080  # Allow traffic on port 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
+    from_port   = 0  # Allow all inbound traffic
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
   
   egress {
-    from_port   = 0
+    from_port   = 0  # Allow all outbound traffic
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
 
 # Create EC2 instance
 resource "aws_instance" "web_ec2_instance" {
