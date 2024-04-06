@@ -21,11 +21,13 @@ resource "aws_subnet" "subnet_a" {
   vpc_id            = aws_vpc.my_vpc.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-west-2a"
-  
+  map_public_ip_on_launch = true  # Enable public IP assignment for instances in this subnet
+
   tags = {
     Name = "SubnetA"
   }
 }
+
 
 # Create a Route Table
 resource "aws_route_table" "my_route_table" {
