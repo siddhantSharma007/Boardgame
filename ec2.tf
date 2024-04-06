@@ -1,4 +1,4 @@
- # Create a VPC
+# Create a VPC
 resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"
   
@@ -82,22 +82,9 @@ resource "aws_instance" "web_ec2_instance" {
   tags = {
     Name = "WebEC2Instance"
   }
-
-  provisioner "local-exec" {
-    # Wait until the instance is in the "running" state
-    # This command uses the AWS CLI to check the instance state
-    command = <<-EOT
-      until [ "$(aws ec2 describe-instances --instance-ids ${self.id} --query 'Reservations[].Instances[].State[].Name' --output text)" = "running" ]; do
-        echo "Waiting for the EC2 instance to be in the running state..."
-        sleep 5
-      done
-    EOT
-  }
 }
 
-output "public_ip" {
+# Output the public IP address of the EC2 instance
+output "public_ip_address" {
   value = aws_instance.web_ec2_instance.public_ip
 }
-
-
-
