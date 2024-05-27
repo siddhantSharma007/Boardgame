@@ -42,7 +42,7 @@ This web application displays lists of board games and their reviews. While anyo
 - Schema.sql file to customize the schema and input initial data
 - Thymeleaf Fragments to reduce redundancy of repeating HTML elements (head, footer, navigation)
 
-## How to Run
+## How to Run the code
 
 1. Clone the repository
 2. Open the project in your IDE of choice
