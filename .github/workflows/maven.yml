@@ -42,9 +42,9 @@ jobs:
     - name: SSH into Ubuntu server and deploy
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.UBUNTU_HOST }}
-        username: ${{ secrets.UBUNTU_USER }}
-        key: ${{ secrets.UBUNTU_KEY }}
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
         port: 22
         script: |
           docker load -i ~/springboot-app.tar
