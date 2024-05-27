@@ -28,10 +28,8 @@ jobs:
     - name: Save Docker image to tar
       run: docker save -o springboot-app.tar springboot-app
 
-    - name: Echo host key and username
-      run: |
-        echo "EC2_HOST: ${{ secrets.EC2_HOST }}"
-        echo "EC2_USER: ${{ secrets.EC2_USER }}"
+    - name: Set permissions for Docker image tarball
+      run: chmod 777 springboot-app.tar
 
     - name: Copy Docker image to Ubuntu server
       uses: appleboy/scp-action@v0.1.7
@@ -52,10 +50,8 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         port: 22
         script: |
-          ls -la ~/
           docker load -i ~/springboot-app.tar
-          docker images
-          docker stop springboot-app || true
-          docker rm springboot-app || true
+          # docker stop springboot-app || true
+          # docker rm springboot-app || true
           docker run -d -p 8080:8080 --name springboot-app springboot-app:latest
         debug: true
