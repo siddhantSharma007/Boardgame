@@ -25,22 +25,14 @@ jobs:
     - name: Build Docker image
       run: docker build -t springboot-app .
 
-    - name: Save Docker image to tar
-      run: docker save -o springboot-app.tar springboot-app
+    - name: Log into Docker Hub
+      run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
-    - name: Set permissions for Docker image tarball
-      run: chmod 777 springboot-app.tar
+    - name: Tag Docker image
+      run: docker tag springboot-app "${{ secrets.DOCKER_HUB_USERNAME }}/springboot-app:latest"
 
-    - name: Copy Docker image to Ubuntu server
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_KEY }}
-        port: 22
-        source: "springboot-app.tar"
-        target: "~/springboot-app.tar"
-        debug: true
+    - name: Push Docker image to Docker Hub
+      run: docker push "${{ secrets.DOCKER_HUB_USERNAME }}/springboot-app:latest"
 
     - name: SSH into Ubuntu server and deploy
       uses: appleboy/ssh-action@v1.0.3
@@ -50,8 +42,8 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         port: 22
         script: |
-          docker load -i ~/springboot-app.tar
-          # docker stop springboot-app || true
-          # docker rm springboot-app || true
-          docker run -d -p 8080:8080 --name springboot-app springboot-app:latest
+          docker pull "${{ secrets.DOCKER_HUB_USERNAME }}/springboot-app:latest"
+          docker stop springboot-app || true
+          docker rm springboot-app || true
+          docker run -d -p 8080:8080 --name springboot-app "${{ secrets.DOCKER_HUB_USERNAME }}/springboot-app:latest"
         debug: true
