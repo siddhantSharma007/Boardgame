@@ -16,6 +16,7 @@ jobs:
     - name: Set up JDK 11
       uses: actions/setup-java@v2
       with:
+        distribution: 'temurin' # or any other supported distribution
         java-version: '11'
 
     - name: Build with Maven
@@ -24,13 +25,17 @@ jobs:
     - name: Build Docker image
       run: docker build -t springboot-app .
 
+    - name: Save Docker image to tar
+      run: docker save -o springboot-app.tar springboot-app
+
     - name: Copy Docker image to EC2
       uses: appleboy/scp-action@v0.1.1
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
-        source: "springboot-app:latest"
+        port: 22
+        source: "springboot-app.tar"
         target: "~/springboot-app.tar"
 
     - name: SSH into EC2 and deploy
@@ -39,6 +44,7 @@ jobs:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
+        port: 22
         script: |
           docker load -i ~/springboot-app.tar
           docker stop springboot-app || true
