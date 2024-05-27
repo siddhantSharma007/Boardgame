@@ -50,7 +50,7 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         port: 22
         script: |
-          # docker load -i ~/springboot-app.tar
+          docker load -i ~/springboot-app.tar
           # docker stop springboot-app || true
           # docker rm springboot-app || true
           docker run -d -p 8080:8080 --name springboot-app springboot-app:latest
