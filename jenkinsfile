@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    parameters {
+        string(name: 'USERNAME', description: 'User name')
+        string(name: 'DETAILS', description: 'should i skip second stage?')
+        string(name: 'TEAM', description: 'Team')
+      
+    }
+    stages {
+        stage('Input check') {
+            steps {
+                input "Does the staging environment look ok?"
+            }
+        }
+        stage('Display name') {
+            when {
+                expression { return params.DETAILS != 'yes' }
+            }
+            steps {
+                echo "${params.TEAM}"
+            }
+        }
+        stage('Print details') {
+            steps {
+                echo "${params.DETAILS}"
+            }
+        }
+    }
+}
